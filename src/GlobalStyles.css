@@ -1,0 +1,103 @@
+/* GlobalStyles.css */
+
+/* Import the Roboto font from Google Fonts with font-display swap */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Reset margin, padding, and box-sizing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global styles */
+body {
+  font-family: 'Roboto', sans-serif; /* Use Roboto as the primary font */
+  background-color: #F5F5F5; /* Light Gray background */
+  color: #333; /* Default text color */
+}
+
+/* Set some basic defaults for common elements */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+  color: #333; /* Default heading color */
+}
+
+p {
+  line-height: 1.6; /* Improve readability of paragraphs */
+}
+
+a {
+  color: #2196F3; /* Ocean Blue for links */
+  text-decoration: none; /* No underline by default */
+}
+
+a:hover {
+  text-decoration: underline; /* Underline on hover for links */
+}
+
+/* Utility classes for primary, secondary, and accent colors */
+.primary-color {
+  color: #2E86AB;
+}
+
+.secondary-color {
+  color: #F5CB5C;
+}
+
+.accent-color {
+  color: #82B74B;
+}
+
+/* Club listings style */
+.club-listing {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd; /* Adds a line between listings */
+}
+
+.club-listing:last-child {
+  border-bottom: none; /* Remove bottom border for the last item */
+}
+
+.club-links {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds space between icons */
+}
+
+.club-links img {
+  width: 20px; /* Adjust the size of the icons */
+}
+
+/* Days of the week filter */
+/* Add this to GlobalStyles.css */
+.days-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.days-filter label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.days-filter input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Beginner friendly tag */
+.beginner-friendly-tag {
+  display: inline-block;
+  background-color: #4CAF50; /* Your primary color */
+  color: white;
+  padding: 5px;
+  margin-top: 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
+}
+
+
+/* You can add more global styles or utility classes as needed */
