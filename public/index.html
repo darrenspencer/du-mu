@@ -5,10 +5,7 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>React App</title>
@@ -16,5 +13,16 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+
+    <!-- Define initMap globally -->
+    <script>
+      function initMap() {
+        // Placeholder for the function expected by Google Maps API.
+        // You can also put the map initialization logic here if you prefer.
+      }
+    </script>
+    
+    <!-- Load Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdlizmgvxUmwRaojnncaO7J-QHnnyy11M&libraries=places" async defer></script>
   </body>
 </html>

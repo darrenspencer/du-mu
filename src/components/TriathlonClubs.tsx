@@ -23,38 +23,55 @@ const TriathlonClubs = () => {
 
   useEffect(() => {
     const SHEET_ID = '1g5nRXvkbsstF49XbNXGIgt_Jc1ML-MD0pKdeDtiEDAU';
-    const RANGE = 'TriathlonClubs!A1:J4';
+    const RANGE = 'TriathlonClubs!A1:J100';
     const API_KEY = 'AIzaSyCdlizmgvxUmwRaojnncaO7J-QHnnyy11M';
     const URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
-
+  
     fetch(URL)
     .then(response => response.json())
     .then(data => {
       const rows = data.values || [];
-      const clubsData = rows.slice(1).map((row: any[]) => ({
-        name: row[1],
-        description: row[2],
-        instagram: row[3],
-        website: row[4],
-        strava: row[5],
-        annual_fee: parseInt(row[6], 10),
-        area: row[7],
-        days: row[8] ? row[8].split(',').map((day: string) => day.trim()) : [], // Handle empty 'days'
-        beginner_friendly: row[9] === 'Beginner friendly'
-      }));
+      const clubsData = rows.slice(1).map((row: any[]) => {
+        // Determine the annual fee value
+        let fee = row[6];
+        let annualFeeValue;
+        if (fee.toLowerCase() === 'free') {
+          annualFeeValue = 0;
+        } else {
+          annualFeeValue = parseInt(fee, 10);
+          if (isNaN(annualFeeValue)) {
+            annualFeeValue = null; // Set to null if not a valid number
+          }
+        }
+  
+        return {
+          name: row[1],
+          description: row[2],
+          instagram: row[3],
+          website: row[4],
+          strava: row[5],
+          annual_fee: annualFeeValue,
+          area: row[7],
+          days: row[8] ? row[8].split(',').map((day: string) => day.trim()) : [], 
+          beginner_friendly: row[9] === 'Beginner friendly'
+        };
+      });
       setClubs(clubsData);
       setAreas(Array.from(new Set(clubsData.map((club: TriathlonClub) => club.area))));
     })
     .catch(error => console.error('Error fetching data:', error));
-}, []);
+  }, []);  
 
-const filteredClubs = clubs.filter(club => {
-    return (!selectedArea || club.area === selectedArea) &&
-           (!selectedDays.length || selectedDays.every(day => club.days.includes(day))) &&
-           (!maxPrice || club.annual_fee <= maxPrice) && // Correctly check max price
-           (!isBeginnerFriendly || club.beginner_friendly);
-  });
+  const filteredClubs = clubs.filter((club: TriathlonClub) => {
+    // Exclude clubs with unknown annual fees (null values) when a maxPrice is set
+    const isFeeKnown = club.annual_fee !== null;
+    const isWithinMaxPrice = maxPrice === null || club.annual_fee <= maxPrice;
+    const isAreaSelected = !selectedArea || club.area === selectedArea;
+    const isDaySelected = selectedDays.length === 0 || selectedDays.every(day => club.days.includes(day));
+    const isFilterBeginnerFriendly = !isBeginnerFriendly || club.beginner_friendly;
   
+    return isFeeKnown && isWithinMaxPrice && isAreaSelected && isDaySelected && isFilterBeginnerFriendly;
+  });  
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day = e.target.value;
@@ -113,26 +130,26 @@ const filteredClubs = clubs.filter(club => {
         </label>
       </div>
 
-      {/* Club Listings */}
-      <ul>
-        {filteredClubs.map((club, index) => (
-          <li key={index} className="club-listing">
-            <h2>{club.name}</h2>
-            <p>{club.description}</p>
-            <div className="club-links">
-              {club.instagram && <a href={club.instagram} target="_blank" rel="noopener noreferrer"><img src="/icons/instagram.png" alt="Instagram" /></a>}
-              {club.website && <a href={club.website} target="_blank" rel="noopener noreferrer"><img src="/icons/website.png" alt="Website" /></a>}
-              {club.strava && <a href={club.strava} target="_blank" rel="noopener noreferrer"><img src="/icons/strava.png" alt="Strava" /></a>}
-            </div>
-            <p>Annual Fee: ${club.annual_fee}</p>
-            <p>Area: {club.area}</p>
-            <p>Days: {club.days.join(', ')}</p>
-            {club.beginner_friendly && <span className="beginner-friendly-tag">Beginner friendly</span>}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+{/* Club Listings */}
+<ul>
+  {filteredClubs.map((club, index) => (
+    <li key={index} className="club-listing">
+      <h2>{club.name}</h2>
+      <p>{club.description}</p>
+      <div className="club-links">
+        {club.instagram && <a href={club.instagram} target="_blank" rel="noopener noreferrer"><img src="/icons/instagram.png" alt="Instagram" /></a>}
+        {club.website && <a href={club.website} target="_blank" rel="noopener noreferrer"><img src="/icons/website.png" alt="Website" /></a>}
+        {club.strava && <a href={club.strava} target="_blank" rel="noopener noreferrer"><img src="/icons/strava.png" alt="Strava" /></a>}
+      </div>
+      <p>Annual Fee: {club.annual_fee === 0 ? 'Free' : (club.annual_fee ? `$${club.annual_fee}` : 'Unknown')}</p>
+      <p>Area: {club.area}</p>
+      <p>Days: {club.days.join(', ')}</p>
+      {club.beginner_friendly && <span className="beginner-friendly-tag">Beginner friendly</span>}
+    </li>
+  ))}
+</ul>
+</div>
+);
 };
 
 export default TriathlonClubs;

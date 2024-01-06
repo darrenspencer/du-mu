@@ -6,14 +6,14 @@
 /* Reset margin, padding, and box-sizing */
 * {
   margin: 0;
-  padding: 0;
+  padding: 10;
   box-sizing: border-box;
 }
 
 /* Global styles */
 body {
   font-family: 'Roboto', sans-serif; /* Use Roboto as the primary font */
-  background-color: #F5F5F5; /* Light Gray background */
+  background-color: #FFFFFF; /* White background */
   color: #333; /* Default text color */
 }
 
@@ -38,15 +38,89 @@ a:hover {
 
 /* Utility classes for primary, secondary, and accent colors */
 .primary-color {
-  color: #2E86AB;
+  color: #4EA6D8;
 }
 
 .secondary-color {
-  color: #F5CB5C;
+  color: #83C769;
 }
 
 .accent-color {
-  color: #82B74B;
+  color: #EF893D;
+}
+
+/* Navigation Bar */
+.nav-bar {
+  background-color: #FFFFFF; /* Adjust the color as needed */
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+}
+
+.nav-logo img {
+  height: 50px; /* Adjust the size as needed */
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #333; /* Link color */
+  margin-left: 20px;
+  text-decoration: none;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* Hamburger Menu Icon */
+.nav-menu-icon {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nav-menu-icon div {
+  width: 25px;
+  height: 3px;
+  background-color: black;
+}
+
+/* Mobile view styles */
+@media (max-width: 768px) {
+  .nav-menu-icon {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    width: 100%;
+    border-top: 1px solid #ddd;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links a {
+    margin: 10px 20px;
+  }
+}
+
+/* Add a bit of spacing at the top of the body */
+body {
+  padding-top: 20px;
 }
 
 /* Club listings style */
@@ -70,8 +144,13 @@ a:hover {
   width: 20px; /* Adjust the size of the icons */
 }
 
+.club-tags {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds space between tags */
+}
+
 /* Days of the week filter */
-/* Add this to GlobalStyles.css */
 .days-filter {
   display: flex;
   flex-wrap: wrap;
@@ -88,10 +167,27 @@ a:hover {
   margin-right: 5px;
 }
 
+/* Terrains filter */
+.terrains-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.terrains-filter label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.terrains-filter input[type="checkbox"] {
+  margin-right: 5px;
+}
+
 /* Beginner friendly tag */
 .beginner-friendly-tag {
   display: inline-block;
-  background-color: #4CAF50; /* Your primary color */
+  background-color: #4EA6D8; /* Your primary color */
   color: white;
   padding: 5px;
   margin-top: 10px;
@@ -99,5 +195,26 @@ a:hover {
   font-size: 0.8em;
 }
 
+/* Social tag */
+.social-tag {
+  display: inline-block;
+  background-color: #83C769; /* Your secondary color */
+  color: white;
+  padding: 5px;
+  margin-top: 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
+}
+
+/* Very social tag */
+.very-social-tag {
+  display: inline-block;
+  background-color: #EF893D; /* Your tertiary color */
+  color: white;
+  padding: 5px;
+  margin-top: 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
+}
 
 /* You can add more global styles or utility classes as needed */
