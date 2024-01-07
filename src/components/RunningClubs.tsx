@@ -104,44 +104,6 @@ const RunningClubs = () => {
 
       {/* Filters */}
       <div className="filters">
-                {/* Maximum Price Filter */}
-                <label>
-          Annual fee max:
-          <input 
-            type="number" 
-            value={maxPrice ?? ''} 
-            onChange={(e) => setMaxPrice(e.target.value ? parseInt(e.target.value) : null)} 
-          />
-        </label>
-        {/* Days Filter */}
-        <div className="days-filter">
-          {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Periodic"].map(day => (
-            <label key={day}>
-              <input 
-                type="checkbox" 
-                value={day} 
-                checked={selectedDays.includes(day)} 
-                onChange={handleDayChange} 
-              />
-              {day}
-            </label>
-          ))}
-        </div>
-
-        {/* Terrains Filter */}
-        <div className="terrains-filter">
-          {["Road", "Trail", "Track"].map(terrain => (
-            <label key={terrain}>
-              <input 
-                type="checkbox" 
-                value={terrain} 
-                checked={selectedTerrains.includes(terrain)} 
-                onChange={handleTerrainChange} 
-              />
-              {terrain}
-            </label>
-          ))}
-        </div>
 
         {/* Area Filter */}
         <label>
@@ -154,35 +116,88 @@ const RunningClubs = () => {
           </select>
         </label>
 
-        {/* Beginner Friendly Filter */}
-        <label>
-          Beginner friendly:
+{/* Days Filter */}
+<div className="days-filter">
+  <label className="filter-label">Active days:</label>
+  <div className="days-checkboxes">
+    {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Periodic"].map(day => (
+      <label key={day} className="day-checkbox">
+        <input 
+          type="checkbox" 
+          value={day} 
+          checked={selectedDays.includes(day)} 
+          onChange={handleDayChange} 
+        />
+        {day}
+      </label>
+    ))}
+  </div>
+</div>
+
+        {/* Terrains Filter */}
+        <div className="terrains-filter">
+        <label className="filter-label">Terrain:</label>
+  <div className="terrains-checkboxes">
+          {["Road", "Trail", "Track"].map(terrain => (
+            <label key={terrain} className="terrain-checkbox">
+              <input 
+                type="checkbox" 
+                value={terrain} 
+                checked={selectedTerrains.includes(terrain)} 
+                onChange={handleTerrainChange} 
+              />
+              {terrain}
+              </label>
+    ))}
+  </div>
+</div>
+
+                {/* Maximum Price Filter */}
+                <label>
+          Annual fee max:
           <input 
-            type="checkbox" 
-            checked={isBeginnerFriendly} 
-            onChange={(e) => setIsBeginnerFriendly(e.target.checked)} 
+            type="number" 
+            value={maxPrice ?? ''} 
+            onChange={(e) => setMaxPrice(e.target.value ? parseInt(e.target.value) : null)} 
           />
         </label>
 
-                {/* Social Filter */}
-                <label>
-          Social:
-          <input 
-            type="checkbox" 
-            checked={isSocial} 
-            onChange={(e) => setIsSocial(e.target.checked)} 
-          />
-        </label>
+{/* Beginner Friendly Filter */}
+<div className="beginner-friendly-filter">
+  <label>
+    Beginner friendly (all speeds, no experience needed):
+    <input 
+      type="checkbox" 
+      checked={isBeginnerFriendly} 
+      onChange={(e) => setIsBeginnerFriendly(e.target.checked)} 
+    />
+  </label>
+</div>
 
-                {/* Very Social Filter */}
-                <label>
-          Very social:
-          <input 
-            type="checkbox" 
-            checked={isVerySocial} 
-            onChange={(e) => setIsVerySocial(e.target.checked)} 
-          />
-        </label>
+
+{/* Social Filter */}
+<div className="social-filter">
+  <label>
+    Social (socializing after runs):
+    <input 
+      type="checkbox" 
+      checked={isSocial} 
+      onChange={(e) => setIsSocial(e.target.checked)} 
+    />
+  </label>
+</div>
+
+{/* Very Social Filter */}
+<div className="very-social-filter">
+  <label>
+    Very social (social is more important than the run):
+    <input 
+      type="checkbox" 
+      checked={isVerySocial} 
+      onChange={(e) => setIsVerySocial(e.target.checked)} 
+    />
+  </label>
+</div>
 
         {/* Google Map */}
       <MapComponent clubs={filteredClubs} />
@@ -193,16 +208,16 @@ const RunningClubs = () => {
   {filteredClubs.map((club, index) => (
     <li key={index} className="club-listing">
       <h2>{club.name}</h2>
-      <p>{club.description}</p>
+      <div>{club.description}</div>
       <div className="club-links">
         {club.instagram && <a href={club.instagram} target="_blank" rel="noopener noreferrer"><img src="/icons/instagram.png" alt="Instagram" /></a>}
         {club.website && <a href={club.website} target="_blank" rel="noopener noreferrer"><img src="/icons/website.png" alt="Website" /></a>}
         {club.strava && <a href={club.strava} target="_blank" rel="noopener noreferrer"><img src="/icons/strava.png" alt="Strava" /></a>}
       </div>
-      <p>Annual Fee: {club.annual_fee === 0 ? 'Free' : (club.annual_fee ? `$${club.annual_fee}` : 'Unknown')}</p>
-      <p>Area: {club.area}</p>
-      <p>Days: {club.days.join(', ')}</p>
-      <p>Terrains: {club.terrains.join(', ')}</p>
+      <div><strong>Area:</strong> {club.area}</div>
+      <div><strong>Days:</strong> {club.days.join(', ')}</div>
+      <div><strong>Terrains:</strong> {club.terrains.join(', ')}</div>
+      <div><strong>Annual Fee:</strong> {club.annual_fee === 0 ? 'Free' : (club.annual_fee ? `$${club.annual_fee}` : 'Unknown')}</div>
       <div className="club-tags">
         {club.beginner_friendly && <span className="beginner-friendly-tag">Beginner friendly</span>}
         {club.social && <span className="social-tag">Social</span>}

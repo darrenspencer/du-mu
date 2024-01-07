@@ -5,8 +5,8 @@
 
 /* Reset margin, padding, and box-sizing */
 * {
-  margin: 0;
-  padding: 10;
+  margin: 10;
+  padding: 20;
   box-sizing: border-box;
 }
 
@@ -15,6 +15,9 @@ body {
   font-family: 'Roboto', sans-serif; /* Use Roboto as the primary font */
   background-color: #FFFFFF; /* White background */
   color: #333; /* Default text color */
+  padding: 0 0px; /* Add padding to the left and right sides */
+  margin: 0 auto; /* Keep existing styling */
+  max-width: 1200px; /* Optional: set a max-width for wider screens */
 }
 
 /* Set some basic defaults for common elements */
@@ -118,17 +121,15 @@ a:hover {
   }
 }
 
-/* Add a bit of spacing at the top of the body */
-body {
-  padding-top: 20px;
-}
 
 /* Club listings style */
 .club-listing {
-  padding: 15px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ddd; /* Adds a line between listings */
+  padding: 3px;
+  margin-bottom: 0px;
+  border-bottom: 2px solid #ddd; /* Adds a line between listings */
 }
+
+
 
 .club-listing:last-child {
   border-bottom: none; /* Remove bottom border for the last item */
@@ -153,7 +154,7 @@ body {
 /* Days of the week filter */
 .days-filter {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: column;
   gap: 10px;
 }
 
@@ -165,6 +166,17 @@ body {
 
 .days-filter input[type="checkbox"] {
   margin-right: 5px;
+}
+
+.days-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.day-checkbox {
+  display: flex;
+  align-items: center;
 }
 
 /* Terrains filter */
@@ -182,6 +194,17 @@ body {
 
 .terrains-filter input[type="checkbox"] {
   margin-right: 5px;
+}
+
+.terrains-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.terrain-checkbox {
+  display: flex;
+  align-items: center;
 }
 
 /* Beginner friendly tag */
