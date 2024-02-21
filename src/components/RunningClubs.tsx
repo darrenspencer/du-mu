@@ -101,13 +101,16 @@ const RunningClubs = () => {
   return (
     <div>
       <h1>Running Clubs</h1>
+      <p>This page shows active running clubs in the Bay Area.
+        I have added some filters, so that you can find a club that matches what you're looking for, but the information might not be up-to-date. A lot of clubs meet at different spots around the city, and most of the time I have only included one location on the map. Clear the filters and scroll down to see all of the clubs. Please contact me if you see any errors.
+      </p>
 
       {/* Filters */}
       <div className="filters">
 
         {/* Area Filter */}
         <label>
-          Area:
+        <strong>Area: </strong>
           <select value={selectedArea ?? ''} onChange={(e) => setSelectedArea(e.target.value || null)}>
             <option value="">Select an Area</option>
             {areas.map(area => (
@@ -118,7 +121,7 @@ const RunningClubs = () => {
 
 {/* Days Filter */}
 <div className="days-filter">
-  <label className="filter-label">Active days:</label>
+  <label className="filter-label"><strong>Active days:</strong></label>
   <div className="days-checkboxes">
     {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Periodic"].map(day => (
       <label key={day} className="day-checkbox">
@@ -136,7 +139,7 @@ const RunningClubs = () => {
 
         {/* Terrains Filter */}
         <div className="terrains-filter">
-        <label className="filter-label">Terrain:</label>
+        <label className="filter-label"><strong>Terrain:</strong></label>
   <div className="terrains-checkboxes">
           {["Road", "Trail", "Track"].map(terrain => (
             <label key={terrain} className="terrain-checkbox">
@@ -154,7 +157,7 @@ const RunningClubs = () => {
 
                 {/* Maximum Price Filter */}
                 <label>
-          Annual fee max:
+                <strong>Annual fee max: </strong>
           <input 
             type="number" 
             value={maxPrice ?? ''} 
@@ -165,7 +168,7 @@ const RunningClubs = () => {
 {/* Beginner Friendly Filter */}
 <div className="beginner-friendly-filter">
   <label>
-    Beginner friendly (all speeds, no experience needed):
+  <strong>Beginner friendly</strong> (all speeds, no experience needed):
     <input 
       type="checkbox" 
       checked={isBeginnerFriendly} 
@@ -178,7 +181,7 @@ const RunningClubs = () => {
 {/* Social Filter */}
 <div className="social-filter">
   <label>
-    Social (socializing after runs):
+  <strong>Social</strong> (regular socializing after runs):
     <input 
       type="checkbox" 
       checked={isSocial} 
@@ -190,7 +193,7 @@ const RunningClubs = () => {
 {/* Very Social Filter */}
 <div className="very-social-filter">
   <label>
-    Very social (social is more important than the run):
+  <strong>Very social</strong> (the social is more important than the run):
     <input 
       type="checkbox" 
       checked={isVerySocial} 

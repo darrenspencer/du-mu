@@ -6,11 +6,11 @@
 /* Reset margin, padding, and box-sizing */
 * {
   margin: 10;
-  padding: 20;
+  padding: 10;
   box-sizing: border-box;
 }
 
-/* Global styles */
+/* Body styles */
 body {
   font-family: 'Roboto', sans-serif; /* Use Roboto as the primary font */
   background-color: #FFFFFF; /* White background */
@@ -121,15 +121,21 @@ a:hover {
   }
 }
 
-
 /* Club listings style */
-.club-listing {
-  padding: 3px;
-  margin-bottom: 0px;
-  border-bottom: 2px solid #ddd; /* Adds a line between listings */
+.club-listing h2 {
+  margin-bottom: 5px; /* Adjust the gap below the heading */
+}
+
+.club-listing div {
+  margin-top: 5px; /* Adjust the gap above the information divs */
 }
 
 
+.club-listing {
+  padding: 5px;
+  margin-bottom: -10px;
+  border-bottom: 2px solid #ddd; /* Adds a line between listings */
+}
 
 .club-listing:last-child {
   border-bottom: none; /* Remove bottom border for the last item */
@@ -213,7 +219,7 @@ a:hover {
   background-color: #4EA6D8; /* Your primary color */
   color: white;
   padding: 5px;
-  margin-top: 10px;
+  margin-top: 0px;
   border-radius: 5px;
   font-size: 0.8em;
 }
@@ -224,7 +230,7 @@ a:hover {
   background-color: #83C769; /* Your secondary color */
   color: white;
   padding: 5px;
-  margin-top: 10px;
+  margin-top: 0px;
   border-radius: 5px;
   font-size: 0.8em;
 }
@@ -235,9 +241,7 @@ a:hover {
   background-color: #EF893D; /* Your tertiary color */
   color: white;
   padding: 5px;
-  margin-top: 10px;
+  margin-top: 0px;
   border-radius: 5px;
   font-size: 0.8em;
 }
-
-/* You can add more global styles or utility classes as needed */
