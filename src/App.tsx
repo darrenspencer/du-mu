@@ -5,6 +5,7 @@ import RunningClubs from './components/RunningClubs';
 import CyclingClubs from './components/CyclingClubs';
 import SwimmingClubs from './components/SwimmingClubs';
 import TriathlonClubs from './components/TriathlonClubs';
+import ClimbingGyms from './components/ClimbingGyms';
 import ThermalTherapy from './components/ThermalTherapy';
 import LineDancing from './components/LineDancing';
 import NavigationBar from './components/NavigationBar';
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/cycling-clubs" element={<CyclingClubs />} />
         <Route path="/swimming-clubs" element={<SwimmingClubs />} />
         <Route path="/triathlon-clubs" element={<TriathlonClubs />} />
+        <Route path="/climbing-gyms" element={<ClimbingGyms />} />
         <Route path="/thermal-therapy" element={<ThermalTherapy />} />
         <Route path="/line-dancing" element={<LineDancing />} />        
       </Routes>

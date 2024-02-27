@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import MapComponent from './MapComponent';
 
 // Define the TriathlonClub interface
 interface TriathlonClub {
@@ -11,6 +12,10 @@ interface TriathlonClub {
   area: string;
   days: string[];
   beginner_friendly: boolean;
+  google_maps: string;
+  social: boolean;
+  very_social: boolean;
+  terrains: string[];
 }
 
 const TriathlonClubs = () => {
@@ -20,10 +25,13 @@ const TriathlonClubs = () => {
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [isBeginnerFriendly, setIsBeginnerFriendly] = useState(false);
+  const [isSocial, setIsSocial] = useState(false);
+  const [isVerySocial, setIsVerySocial] = useState(false);
+  const [selectedTerrains, setSelectedTerrains] = useState<string[]>([]);
 
   useEffect(() => {
     const SHEET_ID = '1g5nRXvkbsstF49XbNXGIgt_Jc1ML-MD0pKdeDtiEDAU';
-    const RANGE = 'TriathlonClubs!A1:J100';
+    const RANGE = 'TriathlonClubs!A1:N6';
     const API_KEY = 'AIzaSyCdlizmgvxUmwRaojnncaO7J-QHnnyy11M';
     const URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
   
@@ -32,7 +40,6 @@ const TriathlonClubs = () => {
     .then(data => {
       const rows = data.values || [];
       const clubsData = rows.slice(1).map((row: any[]) => {
-        // Determine the annual fee value
         let fee = row[6];
         let annualFeeValue;
         if (fee.toLowerCase() === 'free') {
@@ -53,64 +60,57 @@ const TriathlonClubs = () => {
           annual_fee: annualFeeValue,
           area: row[7],
           days: row[8] ? row[8].split(',').map((day: string) => day.trim()) : [], 
-          beginner_friendly: row[9] === 'Beginner friendly'
+          beginner_friendly: row[9] === 'Beginner friendly',
+          google_maps: row[10] || '',
+          social: row[11] === 'Social',
+          very_social: row[12] === 'Very social',
+          terrains: row[13] ? row[13].split(',').map((terrain: string) => terrain.trim()) : [],
         };
       });
       setClubs(clubsData);
       setAreas(Array.from(new Set(clubsData.map((club: TriathlonClub) => club.area))));
     })
     .catch(error => console.error('Error fetching data:', error));
-  }, []);  
+  }, []);
+    
 
   const filteredClubs = clubs.filter((club: TriathlonClub) => {
-    // Exclude clubs with unknown annual fees (null values) when a maxPrice is set
-    const isFeeKnown = club.annual_fee !== null;
-    const isWithinMaxPrice = maxPrice === null || club.annual_fee <= maxPrice;
+    // Include clubs with unknown annual fees (null values) when no maxPrice is set
+    const isFeeAcceptable = maxPrice === null ? club.annual_fee !== undefined : (club.annual_fee !== null && club.annual_fee <= maxPrice);
     const isAreaSelected = !selectedArea || club.area === selectedArea;
     const isDaySelected = selectedDays.length === 0 || selectedDays.every(day => club.days.includes(day));
     const isFilterBeginnerFriendly = !isBeginnerFriendly || club.beginner_friendly;
+    const isFilterSocial = !isSocial || club.social;
+    const isFilterVerySocial = !isVerySocial || club.very_social;
+    const isTerrainSelected = selectedTerrains.length === 0 || selectedTerrains.every(terrain => club.terrains.includes(terrain));
   
-    return isFeeKnown && isWithinMaxPrice && isAreaSelected && isDaySelected && isFilterBeginnerFriendly;
-  });  
+    return isFeeAcceptable && isAreaSelected && isDaySelected && isFilterBeginnerFriendly && isFilterSocial && isFilterVerySocial && isTerrainSelected;
+  });
+  
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day = e.target.value;
     setSelectedDays(selectedDays.includes(day) ? selectedDays.filter(d => d !== day) : [...selectedDays, day]);
   };
 
+  const handleTerrainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const terrain = e.target.value;
+    setSelectedTerrains(selectedTerrains.includes(terrain) ? selectedTerrains.filter(d => d !== terrain) : [...selectedTerrains, terrain]);
+  };
+
   return (
     <div>
       <h1>Triathlon Clubs</h1>
+      <p>This page shows active triathlon clubs in the Bay Area.
+        I have added some filters, so that you can find a club that matches what you're looking for, but the information might not be up-to-date. A lot of clubs meet at different spots around the city, and most of the time I have only included one location on the map. Clear the filters and scroll down to see all of the clubs. Please contact me if you see any errors.
+      </p>
 
       {/* Filters */}
       <div className="filters">
-                {/* Maximum Price Filter */}
-                <label>
-          Annual fee max:
-          <input 
-            type="number" 
-            value={maxPrice ?? ''} 
-            onChange={(e) => setMaxPrice(e.target.value ? parseInt(e.target.value) : null)} 
-          />
-        </label>
-        {/* Days Filter */}
-        <div className="days-filter">
-          {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Periodic"].map(day => (
-            <label key={day}>
-              <input 
-                type="checkbox" 
-                value={day} 
-                checked={selectedDays.includes(day)} 
-                onChange={handleDayChange} 
-              />
-              {day}
-            </label>
-          ))}
-        </div>
 
         {/* Area Filter */}
         <label>
-          Area:
+        <strong>Area: </strong>
           <select value={selectedArea ?? ''} onChange={(e) => setSelectedArea(e.target.value || null)}>
             <option value="">Select an Area</option>
             {areas.map(area => (
@@ -119,15 +119,91 @@ const TriathlonClubs = () => {
           </select>
         </label>
 
-        {/* Beginner Friendly Filter */}
-        <label>
-          Beginner friendly:
+{/* Days Filter */}
+<div className="days-filter">
+  <label className="filter-label"><strong>Active days:</strong></label>
+  <div className="days-checkboxes">
+    {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Periodic"].map(day => (
+      <label key={day} className="day-checkbox">
+        <input 
+          type="checkbox" 
+          value={day} 
+          checked={selectedDays.includes(day)} 
+          onChange={handleDayChange} 
+        />
+        {day}
+      </label>
+    ))}
+  </div>
+</div>
+
+        {/* Terrains Filter */}
+        <div className="terrains-filter">
+        <label className="filter-label"><strong>Terrain:</strong></label>
+  <div className="terrains-checkboxes">
+          {["Road", "Trail", "Track"].map(terrain => (
+            <label key={terrain} className="terrain-checkbox">
+              <input 
+                type="checkbox" 
+                value={terrain} 
+                checked={selectedTerrains.includes(terrain)} 
+                onChange={handleTerrainChange} 
+              />
+              {terrain}
+              </label>
+    ))}
+  </div>
+</div>
+
+                {/* Maximum Price Filter */}
+                <label>
+                <strong>Annual fee max: </strong>
           <input 
-            type="checkbox" 
-            checked={isBeginnerFriendly} 
-            onChange={(e) => setIsBeginnerFriendly(e.target.checked)} 
+            type="number" 
+            value={maxPrice ?? ''} 
+            onChange={(e) => setMaxPrice(e.target.value ? parseInt(e.target.value) : null)} 
           />
         </label>
+
+{/* Beginner Friendly Filter */}
+<div className="beginner-friendly-filter">
+  <label>
+  <strong>Beginner friendly</strong> (all speeds, no experience needed):
+    <input 
+      type="checkbox" 
+      checked={isBeginnerFriendly} 
+      onChange={(e) => setIsBeginnerFriendly(e.target.checked)} 
+    />
+  </label>
+</div>
+
+
+{/* Social Filter */}
+<div className="social-filter">
+  <label>
+  <strong>Social</strong> (regular socializing after):
+    <input 
+      type="checkbox" 
+      checked={isSocial} 
+      onChange={(e) => setIsSocial(e.target.checked)} 
+    />
+  </label>
+</div>
+
+{/* Very Social Filter */}
+<div className="very-social-filter">
+  <label>
+  <strong>Very social</strong> (social is most important):
+    <input 
+      type="checkbox" 
+      checked={isVerySocial} 
+      onChange={(e) => setIsVerySocial(e.target.checked)} 
+    />
+  </label>
+</div>
+
+        {/* Google Map */}
+      <MapComponent clubs={filteredClubs} />
       </div>
 
 {/* Club Listings */}
@@ -135,16 +211,21 @@ const TriathlonClubs = () => {
   {filteredClubs.map((club, index) => (
     <li key={index} className="club-listing">
       <h2>{club.name}</h2>
-      <p>{club.description}</p>
+      <div>{club.description}</div>
       <div className="club-links">
         {club.instagram && <a href={club.instagram} target="_blank" rel="noopener noreferrer"><img src="/icons/instagram.png" alt="Instagram" /></a>}
         {club.website && <a href={club.website} target="_blank" rel="noopener noreferrer"><img src="/icons/website.png" alt="Website" /></a>}
         {club.strava && <a href={club.strava} target="_blank" rel="noopener noreferrer"><img src="/icons/strava.png" alt="Strava" /></a>}
       </div>
-      <p>Annual Fee: {club.annual_fee === 0 ? 'Free' : (club.annual_fee ? `$${club.annual_fee}` : 'Unknown')}</p>
-      <p>Area: {club.area}</p>
-      <p>Days: {club.days.join(', ')}</p>
-      {club.beginner_friendly && <span className="beginner-friendly-tag">Beginner friendly</span>}
+      <div><strong>Area:</strong> {club.area}</div>
+      <div><strong>Days:</strong> {club.days.join(', ')}</div>
+      <div><strong>Terrains:</strong> {club.terrains.join(', ')}</div>
+      <div><strong>Annual Fee:</strong> {club.annual_fee === 0 ? 'Free' : (club.annual_fee ? `$${club.annual_fee}` : 'Unknown')}</div>
+      <div className="club-tags">
+        {club.beginner_friendly && <span className="beginner-friendly-tag">Beginner friendly</span>}
+        {club.social && <span className="social-tag">Social</span>}
+        {club.very_social && <span className="very-social-tag">Very social</span>}
+      </div>    
     </li>
   ))}
 </ul>
